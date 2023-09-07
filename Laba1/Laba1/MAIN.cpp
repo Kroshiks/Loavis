@@ -7,7 +7,7 @@
 #include <Windows.h>
 #include <string.h>
 int i, j;
-struct student
+struct student //Создание структуры
 {
     char FAM[30], NAM[30], FACL[20], GR[10];
 }st[3];
@@ -19,7 +19,7 @@ void Z123()
     int size, MAX, MIN;
     printf("Введите размер массива:");
     scanf("%d", &size);
-    MAS = (int*)malloc(size * sizeof(int));
+    MAS = (int*)malloc(size * sizeof(int));//Выделение памяти под массив
     if (MAS == NULL)
     {
         printf("Не удалось выделить память!\n");
@@ -27,11 +27,12 @@ void Z123()
     }
     for (i = 0; i < size; i++) 
     {
-        MAS[i] = rand()%100;
-        printf("%d\n", MAS[i]);
+        MAS[i] = rand()%100;//Инициализация массива
+        printf("%d\n", MAS[i]);//Вывод массива
     }
     MIN = MAS[0];
     MAX = MAS[0];
+    //Поиск наименьшего и наибольшего значения
     for (i = 0; i < size; i++) 
     {
         if (MAS[i] < MIN)
@@ -53,11 +54,12 @@ void Z4()
         printf("%d).", i + 1);
         for (j = 0; j < 4; j++)
         {
-            DMAS[i][j] = rand() % 100;
+            DMAS[i][j] = rand() % 100;//Инициализация двумерного массива
             printf(" %d\t", DMAS[i][j]);
         }
         printf("\n");
     }
+    //Поиск суммы по строкам
     for (i = 0; i < 4; i++)
     {
         S = 0;
@@ -69,7 +71,7 @@ void Z4()
     }
 }
 
-void vuvod()
+void vuvod()//Вывод структуры на экран 
 {
     printf("\n|  №  |       Фамилия       |         Имя         |     Факультет      |   Группа   |\n");
     printf("|-----+---------------------+---------------------+--------------------+------------|\n");
@@ -84,6 +86,7 @@ void vuvod()
 void Z5()
 {
     printf("\nЗАДАНИЕ 5.\n");
+    //Заполнение структуры
     for (i = 0; i < 3; i++)
     {
         printf("Введите фамилию %d-ого студента: ", i+1);
@@ -98,6 +101,7 @@ void Z5()
    
     char SrchFAM[30], SrchNAM[30], SrchFACL[20], SrcGR[10], h;
     int O = 0;
+    //Поиск
     while(1)
     {
         vuvod();
@@ -111,6 +115,7 @@ void Z5()
         system("cls");
         switch (h)
         {
+        //Поиск по фамилии
         case('1'):
         {
             vuvod();
@@ -121,7 +126,7 @@ void Z5()
             printf("|-----+---------------------+---------------------+--------------------+------------|\n");
             for (i = 0; i < 3; i++)
             {
-                if (strcmp(st[i].FAM, SrchFAM) == 0)
+                if (strcmp(st[i].FAM, SrchFAM) == 0)//Сравнение
                 {
                     printf("|%-5d|%-21s|%-21s|%-20s|%-12s|\n", i + 1, st[i].FAM, st[i].NAM, st[i].FACL, st[i].GR);
                     O++;
@@ -136,6 +141,7 @@ void Z5()
             _getch();
             return;
         }
+        //Поиск по имени
         case('2'):
         {
             vuvod();
@@ -161,6 +167,7 @@ void Z5()
             _getch();
             return;
         }
+        //Поиск по факультету
         case('3'):
         {
             vuvod();
@@ -186,6 +193,7 @@ void Z5()
             _getch();
             return;
         }
+        //Поиск по группе
         case('4'):
         {
             vuvod();
@@ -219,11 +227,12 @@ void Z5()
     }
     return;
 }
-void main()
+void main()//Основной файл программы
 {
-    SetConsoleCP(1251);
+
+    SetConsoleCP(1251);//Установка языка
     SetConsoleOutputCP(1251);
-    srand(time(NULL));
+    srand(time(NULL));//Установка времени
     Z123();
     Z4();
     Z5();
