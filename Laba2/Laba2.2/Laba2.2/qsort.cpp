@@ -8,7 +8,10 @@ void fillings3(int size)
 {
     int* a = NULL;
     int i;
-    double T = 0.0;
+    double T1 = 0.0;
+	double T2 = 0.0;
+	double T3 = 0.0;
+	double T4 = 0.0;
     clock_t start, end;
     FILE* qsort1, * qsort2, * qsort3, * qsort4;
 
@@ -27,8 +30,7 @@ void fillings3(int size)
     start = clock();
     qsort(a, size, sizeof(int), compare);
     end = clock();
-    T = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Время(последовательный набор) = %fс\n", T);
+    T1 = ((double)(end - start)) / CLOCKS_PER_SEC;
 
     fprintf(qsort1, "\n\nПосле сортировки\n");
     for (i = 0; i < size; i++)
@@ -54,8 +56,7 @@ void fillings3(int size)
     start = clock();
     qsort(a, size, sizeof(int), compare);
     end = clock();
-    T = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Время(обратный набор) = %fс\n", T);
+    T2 = ((double)(end - start)) / CLOCKS_PER_SEC;
     
     fprintf(qsort2, "\n\nПосле сортировки\n");
     for (i = 0; i < size; i++)
@@ -90,8 +91,7 @@ void fillings3(int size)
     start = clock();
     qsort(a, size, sizeof(int), compare);
     end = clock();
-    T = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Время(половинный набор) = %fс\n", T);
+    T3 = ((double)(end - start)) / CLOCKS_PER_SEC;
 
     fprintf(qsort3, "\n\nПосле сортировки\n");
     for (i = 0; i < size; i++)
@@ -117,8 +117,8 @@ void fillings3(int size)
     start = clock();
     qsort(a, size, sizeof(int), compare);
     end = clock();
-    T = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Время(случайный набор)= %fс\n", T);
+    T4 = ((double)(end - start)) / CLOCKS_PER_SEC;
+
 
     fprintf(qsort4, "\n\nПосле сортировки\n");
     for (i = 0; i < size; i++)
@@ -128,4 +128,7 @@ void fillings3(int size)
     fclose(qsort4);
 
     free(a);
+
+	printf("| qsort|   %f   |    %f   |   %f    |   %f  |\n", T1, T2, T3, T4);
+	
 }
