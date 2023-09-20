@@ -1,0 +1,33 @@
+#include "Library.h"
+
+//Функция для выделения памяти под массив
+void MemoryAllocation(int** arr, int size)
+{
+    *arr = (int*)malloc(size * sizeof(int));
+
+    if (*arr == NULL) {
+        printf("Не удалось выделить память!\n");
+        return;
+    }
+}
+
+//Основная функция программы
+void main()
+{
+    SetConsoleCP(1251);//Установка языка
+    SetConsoleOutputCP(1251);
+    srand(time(NULL));//установка времени
+   
+    int size;
+    printf("Ведите размер массива:");
+    scanf("%d", &size);
+
+    printf("\nСортировка Шелла:\n");
+    fillings1(size);
+
+    printf("\nБыстрая сортировка:\n");
+    fillings2(size);
+
+    printf("\nСортировка функцией qsort:\n");
+    fillings3(size);
+}

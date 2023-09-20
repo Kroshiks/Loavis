@@ -1,0 +1,4 @@
+﻿  Source.cpp
+D:\PGU\2 курс\1 курс\Логика\Laba2\Laba2\Source.cpp(53,12): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+D:\PGU\2 курс\1 курс\Логика\Laba2\Laba2\Source.cpp(63,12): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  Laba2.vcxproj -> D:\PGU\2 курс\1 курс\Логика\Laba2\x64\Debug\Laba2.exe
