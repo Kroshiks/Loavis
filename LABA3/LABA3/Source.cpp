@@ -11,10 +11,6 @@ struct node
 	int prir;
 };
 
-struct Queue {
-	struct node* front, * rear;
-};
-
 struct node* head = NULL, * last = NULL, * f = NULL;
 int dlinna = 0;
 
@@ -40,19 +36,32 @@ struct node* get_struct(int pr)
 	return p; // возвращаем указатель на созданный элемент
 }
 
-void queue(struct Queue* q)
+void queue(struct node** head, struct node** last)
 {
 	struct node* temp = get_struct(0);
-	
-	if (q->rear == NULL) 
+
+	if (*head == NULL && temp != NULL)
 	{
-		q->front = q->rear = temp;
-		return;
+		*head = temp;
+		*last = temp;
+	}
+	else if (*head != NULL && temp != NULL)
+	{
+		(*last)->next = temp;
+		*last = temp;
+	}
+}
+
+void ueue(struct node** head)
+{
+	struct node* temp = get_struct(0);
+
+	if (temp != NULL)
+	{
+		temp->next = *head;
+		*head = temp;
 	}
 
-	// Добавляем новый узел в конец очереди и обновляем указатель на последний элемент
-	q->rear->next = temp;
-	q->rear = temp;
 }
 
 void prioritet(struct node** head, int pr)
@@ -61,14 +70,14 @@ void prioritet(struct node** head, int pr)
 
 	struct node* temp = get_struct(pr);
 
-	if (*head == NULL || (*head)->prir < pr)
+	if (*head == NULL || (*head)->prir >= pr)
 	{
 		temp->next = *head;
 		*head = temp;
 	}
 	else
 	{
-		while (prom->next != NULL && prom->next->prir >= pr)
+		while (prom->next != NULL && prom->next->prir < pr)
 		{
 			prom = prom->next;
 		}
@@ -77,13 +86,25 @@ void prioritet(struct node** head, int pr)
 	}
 }
 
+void free_queue(struct node* head)
+{
+	struct node* current = head;
+	struct node* next;
+
+	while (current != NULL)
+	{
+		next = current->next;
+		free(current);
+		current = next;
+	}
+}
+
 void main()
 {
-	int f=0;
+	int f = 0;
+	int i = 0;
 	SetConsoleCP(1251);//Установка языка
 	SetConsoleOutputCP(1251);
-
-	
 
 	while (f != 4)
 	{
@@ -94,7 +115,7 @@ void main()
 		printf("3) Стек.\n");
 		printf("4) Выход.\n");
 		scanf("%d", &f);
-		
+
 		switch (f)
 		{
 		case 1:
@@ -109,58 +130,95 @@ void main()
 			{
 				printf("\nВведите приоритет обьекта №%d:", i + 1);
 				scanf("%d", &pr);
-				printf("Введите название объекта №%d:", i + 1);
+
+				if (pr < 0)
+				{
+					printf(" Ошибка при записи приоритета\n");
+					_getch();
+					return;
+				}
+
+				printf("Введите название элемента №%d:", i + 1);
 				prioritet(&head, pr);
 			}
+
+			printf("\n|  №  |  Элемент  |   Приоритет  |\n");
+			printf("+-----+-----------+--------------+\n");
 
 			struct node* current = head;
 			while (current != NULL)
 			{
-				printf("Элемент %s (приоритет %d)\n", current->inf, current->prir);
+				i++;
+				printf("|%-5d|%-11s|%-14d|\n", i, current->inf, current->prir);
+				printf("+-----+-----------+--------------+\n");
 				current = current->next;
-			}
+			}	
 			_getch();
-			break;
+			return;
 		}
 		case 2:
 		{
 			system("cls");
-
-		
 
 			printf("Введите количество элементов в очереди:");
 			scanf("%d", &dlinna);
 
 			for (int i = 0; i < dlinna; i++)
 			{
-				printf("\nВведите название объекта №%d:", i + 1);
-				queue(q);
+				printf("\nВведите название элемента №%d:", i + 1);
+				queue(&head, &last);
 			}
 
-			
-			struct node* current = q->front;
-			while (current != NULL)
+			printf("\n|  №  |  Элемент  |\n");
+			printf("+-----+-----------+\n");
+
+			struct node* urrent = head;
+			while (urrent != NULL)
 			{
-				printf("Элемент %s\n", current->inf);
-				current = current->next;
+				i++;
+				printf("|%-5d|%-11s|\n", i, urrent->inf);
+				printf("+-----+-----------+\n");
+				urrent = urrent->next;
 			}
 			_getch();
-			break;
+			return;
 		}
 		case 3:
 		{
 			system("cls");
-			
-			break;
+
+			printf("Введите количество элементов в очереди:");
+			scanf("%d", &dlinna);
+
+			for (int i = 0; i < dlinna; i++)
+			{
+				printf("\nВведите название элемента №%d:", i + 1);
+				ueue(&head);
+			}
+
+			printf("\n|  №  |  Элемент  |\n");
+			printf("+-----+-----------+\n");
+
+			struct node* rrent = head;
+			while (rrent != NULL)
+			{
+				dlinna--;
+				printf("|%-5d|%-11s|\n", dlinna, rrent->inf);
+				printf("+-----+-----------+\n");
+				rrent = rrent->next;
+			}
+			_getch();
+
+			return;
 		}
-		case 0:
+		case 4:
 		{
 			system("cls");
 			printf("ВЫХОД\n");
-			break;
+			return;
 		default:
 			printf("Неверный выбор\n");
-			break;
+			return;
 		}
 		}
 	}
