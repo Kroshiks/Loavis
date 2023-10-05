@@ -1,3 +1,3 @@
 ﻿  Source.cpp
-D:\PGU\2 курс\1 семестр\Логика\LABA3\LABA3\Source.cpp(103,1): warning C4326: возвращаемый тип "main" должен быть "int", а не "void"
+D:\PGU\2 курс\1 семестр\Логика\LABA3\LABA3\Source.cpp(157,1): warning C4326: возвращаемый тип "main" должен быть "int", а не "void"
   LABA3.vcxproj -> D:\PGU\2 курс\1 семестр\Логика\LABA3\x64\Debug\LABA3.exe
