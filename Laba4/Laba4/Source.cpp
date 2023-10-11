@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
@@ -9,7 +8,7 @@ typedef struct Tree {
     struct Tree* left;
     struct Tree* right;
 } Tree;
-
+int k=-2;
 Tree* CreateTree(Tree* root, int data)
 {
     if (root == NULL)
@@ -31,7 +30,7 @@ Tree* CreateTree(Tree* root, int data)
     {
         root->left = CreateTree(root->left, data);
     }
-    else if (data >= root->data)
+    else if (data > root->data)
     {
         root->right = CreateTree(root->right, data);
     }
@@ -47,17 +46,24 @@ Tree* CreateTree(Tree* root, int data)
 
 //Функция для подсчета вхождений элемента в дерево
 int counter(Tree* root, int data) {
+
     if (root == NULL) {
         return 0;
     }
     if (root->data == data) {
+k++;
         return 1 + counter(root->left, data) + counter(root->right, data);
+
     }
     else if (data < root->data) {
+k++;
         return counter(root->left, data);
+
     }
     else {
+k++;
         return counter(root->right, data);
+
     }
 }
 
@@ -73,7 +79,7 @@ void print_tree(Tree* root, int level)
 
     for (int i = 0; i < level; i++)
     {
-        printf(" ");
+        printf("\t");
     }
 
     printf("%d\n", root->data);
@@ -89,20 +95,20 @@ int main()
     Tree* root = NULL;
     int f = 0, element,input;
   
-	do
-	{
+do
+{
         printf("      МЕНЮ\n");
-		printf("1) Построить дерево.\n");
-		printf("2) Найти элемент\n");
-		printf("3) Выход.\n");
+printf("1) Построить дерево.\n");
+printf("2) Найти элемент\n");
+printf("3) Выход.\n");
         printf("\nВыберите номер действия, которое хотите выполнить: ");
-		scanf("%d", &f);
+scanf("%d", &f);
 
-		switch (f)
-		{
-		case 1:
-		{
-			system("cls");
+switch (f)
+{
+case 1:
+{
+system("cls");
 
             printf("-1 - окончание построения дерева\n");
 
@@ -117,33 +123,36 @@ int main()
                     start = 0;
                 }
                 
-                else root = CreateTree(root, data);     
+                else root = CreateTree(root, data );     
             }
 
             print_tree(root, 0);
             printf("\n");
-			break;
-		}
-		case 2:
-		{
+break;
+}
+case 2:
+{
             printf("\nВведите элемент, которое хотите найти: ");
             scanf("%d", &element);
 
+
             input = counter(root, element);
+
             printf("Количество вхождений элемента %d = %d\n", element, input);
+ printf("Уровень элемента %d", k);
             printf("\n");
-			break;
-		}
-		case 3:
-		{
-			system("cls");
-			printf("ВЫХОД\n");
-			return 0;
-		default:
-			printf("Неверный выбор\n");
-			return 0;
-		}
-		}
+break;
+}
+case 3:
+{
+system("cls");
+printf("ВЫХОД\n");
+return 0;
+default:
+printf("Неверный выбор\n");
+return 0;
+}
+}
     } while (f != 4);
 
     return 0;
