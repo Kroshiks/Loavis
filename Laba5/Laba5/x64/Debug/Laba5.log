@@ -1,0 +1,4 @@
+﻿  Source.cpp
+D:\PGU\2 курс\1 семестр\Логика\Laba5\Laba5\Laba5\Source.cpp(7,13): warning C4326: возвращаемый тип "main" должен быть "int", а не "void"
+D:\PGU\2 курс\1 семестр\Логика\Laba5\Laba5\Laba5\Source.cpp(9,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  Laba5.vcxproj -> D:\PGU\2 курс\1 семестр\Логика\Laba5\Laba5\x64\Debug\Laba5.exe
