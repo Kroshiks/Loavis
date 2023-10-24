@@ -1,0 +1,7 @@
+﻿  Main.cpp
+D:\PGU\2 курс\1 семестр\Логика\laba6\laba6\laba6\Main.cpp(5,1): warning C4326: возвращаемый тип "main" должен быть "int", а не "void"
+D:\PGU\2 курс\1 семестр\Логика\laba6\laba6\laba6\Main.cpp(7,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  Zad1.cpp
+  Zad2.cpp
+  Создание кода...
+  laba6.vcxproj -> D:\PGU\2 курс\1 семестр\Логика\laba6\laba6\x64\Debug\laba6.exe
