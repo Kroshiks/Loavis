@@ -15,7 +15,7 @@ typedef struct GraphSettings {
 
 GS values(int argc, char* argv[])
 {
-    GS val = { 1,0 };
+    GS val = { 0,0 };
 
     for (i = 1; i < argc; i++) 
     {
@@ -163,7 +163,6 @@ void main(int argc, char* argv[])
         }
         cout << endl;
     }
-    cout << endl;
     do
     {
         cout << endl;
@@ -220,7 +219,6 @@ void main(int argc, char* argv[])
                 else
                     cout << "ћинимальное рассто€ние от вершины " << ver1 << " до вершины " << i + 1 << " = " << dist[i] << endl;
             }
-            cout << endl;
             delete[] dist;
             break;
         case 2:
@@ -258,8 +256,7 @@ void main(int argc, char* argv[])
                     }                  
                 }              
                 eksen[first] = MaxDist;
-                cout << first + 1 << ") " << eksen[first]<< endl;
-                
+
             }        
            for (i = 0; i < ver; i++) 
             {
