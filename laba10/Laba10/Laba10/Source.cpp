@@ -15,15 +15,15 @@ typedef struct GraphSettings {
 
 GS values(int argc, char* argv[])
 {
-    GS val = { 0,0 };
+    GS val = { 1,0 };
 
-    for (i = 1; i < argc; i++) 
+    for (i = 1; i < argc; i++)
     {
-        if (strcmp(argv[i], "-w") == 0) 
+        if (strcmp(argv[i], "-w") == 0)
         {
             val.weighted = 1;
         }
-        else if (strcmp(argv[i], "-o") == 0) 
+        else if (strcmp(argv[i], "-o") == 0)
         {
             val.orientation = 1;
         }
@@ -31,19 +31,19 @@ GS values(int argc, char* argv[])
 
     return val;
 }
-void SearchDist(int** smej,int ver, int ver1, int* dist)
+void SearchDist(int** smej, int ver, int ver1, int* dist)
 {
     int newdist = 0;
     queue<int> q;  // пустая очередь
     dist[ver1 - 1] = 0;
-        q.push(ver1);
-    while (!q.empty()) 
+    q.push(ver1);
+    while (!q.empty())
     {
         int current = q.front();
         q.pop();
-        for (int i = 0; i < ver; i++) 
+        for (int i = 0; i < ver; i++)
         {
-           
+
             if (smej[current - 1][i] > 0)
             {
                 newdist = dist[current - 1] + smej[current - 1][i];
@@ -57,33 +57,13 @@ void SearchDist(int** smej,int ver, int ver1, int* dist)
     }
 }
 
-void SearchPadAndDiam(int** smej, int* visit, int ver, int ver1)
-{
-    queue<int> Q;  // пустая очередь
-    visit[ver1] = 0;
-   
-    Q.push(ver1);
-    while (!Q.empty())
-    {
-        int current = Q.front();
-        Q.pop();
-        for (i = 0; i < ver; i++)
-        {
-            if (smej[current][i] > 0 && visit[i] == -1)
-            {
-                visit[i] = visit[current] + smej[current][i];             
-                    Q.push(i);
-            }
-        }
-    }
-}
 void main(int argc, char* argv[])
 {
     setlocale(LC_ALL, "RUS");
     srand(time(NULL));
     GS gs = values(argc, argv);
-    int** smej = 0; 
-    int* visit = 0;  
+    int** smej = 0;
+    int* visit = 0;
     int* dist = 0;
     int* eksen = 0;
     int choice, ver, ver1, k = 0, first = 0, MaxDist = 0, D = 0, R = 0;
@@ -118,7 +98,7 @@ void main(int argc, char* argv[])
             {
                 if (gs.weighted == 1 && gs.orientation == 1)
                 {
-                    smej[i][j] = (-9) + rand() % 19; 
+                    smej[i][j] = (-9) + rand() % 19;
                     if (smej[i][j] < 0)
                     {
                         smej[i][j] = 0;
@@ -130,7 +110,7 @@ void main(int argc, char* argv[])
                 else if (gs.weighted == 0 && gs.orientation == 1)
                 {
                     smej[i][j] = (-1) + rand() % 3;
-                    if (smej[i][j] <0)
+                    if (smej[i][j] < 0)
                     {
                         smej[i][j] = 0;
                         smej[j][i] = rand() % 2;
@@ -207,7 +187,7 @@ void main(int argc, char* argv[])
                     else
                         prov1 = false;
                 }
-                    
+
             } while (prov1);
 
             cout << "Поиск расстояний был выполнен!" << endl;
@@ -229,7 +209,7 @@ void main(int argc, char* argv[])
             {
                 cout << "Не удалось выделить память!" << endl;
                 return;
-            }                 
+            }
             eksen = new int[ver];
             if (eksen == NULL)
             {
@@ -244,28 +224,34 @@ void main(int argc, char* argv[])
             {
                 for (i = 0; i < ver; i++)
                 {
-                    visit[i] = -1;
-                }           
-                SearchPadAndDiam(smej,visit, ver, first);
+                    visit[i] = INT_MAX;
+                }
+                SearchDist(smej, ver, first+1, visit);
                 MaxDist = 0;
                 for (i = 0; i < ver; i++)
                 {
                     if (visit[i] > MaxDist)
                     {
                         MaxDist = visit[i];
-                    }                  
-                }              
+                    }
+                } 
+                cout << endl << "Для вершины " << first + 1<<endl;
+                for (int firs = 0; firs < ver; firs++)
+                {
+                    cout << visit[firs] << " ";
+                }
+                cout << endl;
                 eksen[first] = MaxDist;
-
-            }        
-           for (i = 0; i < ver; i++) 
+                cout << "Эксентриситет " << eksen[first] << endl;
+            }
+            for (i = 0; i < ver; i++)
             {
                 if (eksen[i] > D)
                 {
                     D = eksen[i];
                 }
             }
-           R = D;
+            R = D;
             for (i = 0; i < ver; i++)
             {
                 if (eksen[i] < R)
@@ -274,24 +260,24 @@ void main(int argc, char* argv[])
                 }
             }
             cout << endl << "Радиус графа:" << R << endl;
-            cout << "Диаметр графа:" << D << endl;       
-            cout  << "Центральные вершины";
-            for (i = 0; i < ver; i++) 
+            cout << "Диаметр графа:" << D << endl;
+            cout << "Центральные вершины";
+            for (i = 0; i < ver; i++)
             {
                 if (eksen[i] == R)
                 {
                     cout << " " << i + 1;
                 }
-              
-            }         
+
+            }
             cout << endl << "Периферийные вершины";
-            for (i = 0; i < ver; i++) 
+            for (i = 0; i < ver; i++)
             {
                 if (eksen[i] == D)
                 {
                     cout << " " << i + 1;
                 }
-            }    
+            }
             cout << endl;
             delete[] visit;
             delete[] eksen;
@@ -314,7 +300,6 @@ void main(int argc, char* argv[])
         delete[] smej[i];
     }
     delete[] smej;
-    
-}
 
+}
 
