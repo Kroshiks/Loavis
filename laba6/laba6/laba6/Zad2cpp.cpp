@@ -22,37 +22,52 @@ void IdentificationMatrix(int** smej, int* ver, int veri1, int veri2, SP** MassS
         veri2 = T;
     }
 
-    for (int i = 0; i < *ver; i++)
-    {
-        for (int j = 0; j < *ver; j++)
+    bool hasEdge = smej[veri1][veri2];
+
+  for (int i = 0; i < *ver; ++i) 
+  {
+      if (i != veri1 && i != veri2)
         {
-            smej[i][veri1] = smej[i][veri1] || smej[i][veri2];
-            smej[veri1][j] = smej[veri1][j] || smej[veri2][j];
+            smej[veri1][i] = smej[veri1][i] || smej[veri2][i]; // Объединяем строки veri1 и veri2
+            smej[i][veri1] = smej[i][veri1] || smej[i][veri2]; // Объединяем столбцы veri1 и veri2
         }
     }
 
-    for (int i = 0; i < *ver - 1; i++)
+    for (i = veri2; i < *ver - 1; i++)
     {
-        for (int j = veri2; j < *ver - 1; j++)
+        for (j = 0; j < *ver - 1; j++)
+        {
+            smej[i][j] = smej[i + 1][j];
+        }
+    }
+
+    for ( i = 0; i < *ver - 1; i++)
+    {
+        for ( j = veri2; j < *ver - 1; j++)
         {
             smej[i][j] = smej[i][j + 1];
         }
     }
 
-    for (int i = veri2; i < *ver - 1; i++)
+    for (i = 0; i < *ver - 1; i++)
     {
-        for (int j = 0; j < *ver - 1; j++)
+        for (j = 0; j < *ver - 1; j++)
         {
-            smej[i][j] = smej[i+1][j];
+            if (i==j) smej[i][j] = 0;
+           
         }
     }
 
+    if (hasEdge)
+    {
+        smej[veri1][veri1] = 1;
+    }
     cout << "Вершина " << veri1 + 1 << " и вершина " << veri2 + 1 << " успешно отождествлены." << endl;
-    PrintMatrix(*ver-1, &smej);
+    PrintMatrix(*ver - 1, &smej);
 
     (*ver)--;
 
-    for (int i = 0; i < *ver + 1; i++) 
+    for (int i = 0; i < *ver + 1; i++)
     {
         free(MassSpis[i]);
         MassSpis[i] = NULL;
@@ -62,7 +77,7 @@ void IdentificationMatrix(int** smej, int* ver, int veri1, int veri2, SP** MassS
     cout << endl;
 }
 
-void RibTightening(int** smej,int* ver,int veri1, int veri2 ,SP** MassSpis)
+void RibTightening(int** smej, int* ver, int veri1, int veri2, SP** MassSpis)
 {
     int T;
 
@@ -78,30 +93,51 @@ void RibTightening(int** smej,int* ver,int veri1, int veri2 ,SP** MassSpis)
         printf("Между вершинами должно быть ребро!\n");
         return;
     }
-    for (int i = 0; i < *ver; i++)
+
+    bool* hasEdge = new bool [*ver];
+    memset(hasEdge, false, sizeof(bool) * (*ver));
+
+    for (i = 0; i < *ver; ++i)
     {
-        for (int j = 0; j < *ver; j++)
+        if (smej[i][i] == 1) 
+        {
+            hasEdge[i] = true;
+        }
+    }
+
+    for (i = 0; i < *ver; i++)
+    {
+        for (j = 0; j < *ver; j++)
         {
             smej[i][veri1] = smej[i][veri1] || smej[i][veri2];
             smej[veri1][j] = smej[veri1][j] || smej[veri2][j];
         }
     }
-    smej[veri1][veri1] = 0;
-    for (int i = 0; i < *ver - 1; i++)
+
+    for (i = 0; i < *ver - 1; i++)
     {
-        for (int j = veri2; j < *ver - 1; j++)
+        for (j = veri2; j < *ver - 1; j++)
         {
             smej[i][j] = smej[i][j + 1];
         }
     }
 
-    for (int i = veri2; i < *ver - 1; i++)
+    for (i = veri2; i < *ver - 1; i++)
     {
-        for (int j = 0; j < *ver - 1; j++)
+        for (j = 0; j < *ver - 1; j++)
         {
             smej[i][j] = smej[i + 1][j];
         }
     }
+    
+    for (i = 0; i < *ver-1; ++i) 
+    {
+        if (i != veri1 && i != veri2 && hasEdge[i]) smej[i][i] = 1;     
+        else smej[i][i] = 0;
+    }
+   
+    delete[] hasEdge;
+
     cout << " Между вершиной " << veri1 + 1 << " и вершиной " << veri2 + 1 << " было успешно стянуто ребро." << endl;
     PrintMatrix(*ver - 1, &smej);
 
@@ -128,7 +164,7 @@ void SplittingAVertex(int** smej, int* ver, int veri1, SP** MassSpis)
     for (i = 0; i < newver; i++)
     {
         smejprom[i] = new int[newver];
-       for ( j = 0; j < newver; j++) 
+        for (j = 0; j < newver; j++)
         {
             if (i < *ver && j < *ver)
             {
@@ -142,12 +178,13 @@ void SplittingAVertex(int** smej, int* ver, int veri1, SP** MassSpis)
             {
                 smejprom[i][j] = smej[i][veri1];  // смежные вершины соединены с новой вершиной
             }
-            else 
+            else
             {
                 smejprom[i][j] = 0;  // новая вершина не связана с остальными вершинами
             }
         }
     }
+
     (*ver)++;
     smej = new int* [*ver];
     if (smej == NULL)
@@ -163,10 +200,11 @@ void SplittingAVertex(int** smej, int* ver, int veri1, SP** MassSpis)
     {
         for (j = 0; j < *ver; j++)
         {
-            smej[i][j] = smejprom[i][j];
+            if (i == veri1 && j == *ver - 1 || j == veri1 && i == *ver - 1)  smej[i][j] = 1;
+            else smej[i][j] = smejprom[i][j];
         }
     }
-    cout << "Резльтат расщепления вершины: " << veri1+1 << endl;
+    cout << "Резльтат расщепления вершины: " << veri1 + 1 << endl;
     PrintMatrix(*ver, &smej);
 
     for (int i = 0; i < *ver - 1; i++)
@@ -244,7 +282,7 @@ void Zad2(int ver1, int ver2, int** smej1, int** smej2, SP** MassSpis1, SP** Mas
                 if (graf == 1 || graf == 2)
                     prov1 = false;
                 else
-                    cout << "Ошибка: неверный ввод номера графа! Повторите попытку."<<endl;
+                    cout << "Ошибка: неверный ввод номера графа! Повторите попытку." << endl;
             } while (prov1);
 
             if (graf == 1)
@@ -269,7 +307,7 @@ void Zad2(int ver1, int ver2, int** smej1, int** smej2, SP** MassSpis1, SP** Mas
                     cout << "Введите номера вершин, которые хотите отождествить(через пробел):";
                     cin >> veri1 >> veri2;
                     if (veri1 - 1 >= ver2 || veri2 - 1 >= ver2 || veri1 - 1 < 0 || veri2 - 1 < 0 || veri1 == veri2)
-                        cout << "Ошибка: неверный ввод номеров вершин! Повторите попытку."<<endl;
+                        cout << "Ошибка: неверный ввод номеров вершин! Повторите попытку." << endl;
                     else
                         prov3 = false;
                 } while (prov3);
@@ -315,7 +353,7 @@ void Zad2(int ver1, int ver2, int** smej1, int** smej2, SP** MassSpis1, SP** Mas
                     cout << "Введите номера вершин, между которыми надо стянуть ребро(через пробел):";
                     cin >> veri1 >> veri2;
                     if (veri1 - 1 >= ver2 || veri2 - 1 >= ver2 || veri1 - 1 < 0 || veri2 - 1 < 0 || veri1 == veri2)
-                        cout << "Ошибка: неверный ввод номеров вершин! Повторите попытку."<<endl;
+                        cout << "Ошибка: неверный ввод номеров вершин! Повторите попытку." << endl;
                     else
                         prov3 = false;
                 } while (prov3);
@@ -331,12 +369,12 @@ void Zad2(int ver1, int ver2, int** smej1, int** smej2, SP** MassSpis1, SP** Mas
             do
             {
                 cout << endl;
-                cout << "Выберите граф в котором хотите осуществить стягивание ребра(1 или 2):";
+                cout << "Выберите граф в котором хотите осуществить расщепление вершины(1 или 2):";
                 cin >> graf;
                 if (graf == 1 || graf == 2)
                     prov1 = false;
                 else
-                    cout << "Ошибка: неверный ввод номера графа! Повторите попытку."<<endl;
+                    cout << "Ошибка: неверный ввод номера графа! Повторите попытку." << endl;
             } while (prov1);
             if (graf == 1)
             {
@@ -344,7 +382,7 @@ void Zad2(int ver1, int ver2, int** smej1, int** smej2, SP** MassSpis1, SP** Mas
                 {
                     cout << "Введите номер вершины, которую хотите расщепить:";
                     cin >> veri1;
-                    if (veri1 - 1 >= ver1 ||  veri1 - 1 < 0)
+                    if (veri1 - 1 >= ver1 || veri1 - 1 < 0)
                         cout << "Ошибка: неверный ввод номера вершины! Повторите попытку." << endl;
                     else
                         prov2 = false;
@@ -359,8 +397,8 @@ void Zad2(int ver1, int ver2, int** smej1, int** smej2, SP** MassSpis1, SP** Mas
                 {
                     cout << "Введите номер вершины, которую хотите расщепить:";
                     cin >> veri1;
-                    if (veri1 - 1 >= ver2 ||  veri1 - 1 < 0)
-                        cout << "Ошибка: неверный ввод номера вершины! Повторите попытку."<<endl;
+                    if (veri1 - 1 >= ver2 || veri1 - 1 < 0)
+                        cout << "Ошибка: неверный ввод номера вершины! Повторите попытку." << endl;
                     else
                         prov3 = false;
                 } while (prov3);
@@ -372,7 +410,7 @@ void Zad2(int ver1, int ver2, int** smej1, int** smej2, SP** MassSpis1, SP** Mas
             break;
             cout << endl;
         default:
-            cout << "Неверный выбор! Повторите попытку."<<endl;
+            cout << "Неверный выбор! Повторите попытку." << endl;
             break;
         }
     } while (choice != 4);

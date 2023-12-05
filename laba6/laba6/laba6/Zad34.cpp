@@ -1,15 +1,15 @@
 #include "Header.h"
 
-void CombiningGraphs(int** smej1,int** smej2, int ver1, int ver2)
+void CombiningGraphs(int** smej1, int** smej2, int ver1, int ver2)
 {
     int maxver;
-    if(ver1 > ver2)
+    if (ver1 > ver2)
         maxver = ver1;
-     else
+    else
         maxver = ver2;
     int** smejcomb = new int* [maxver];
-    for(i = 0; i < maxver; i++)
-    { 
+    for (i = 0; i < maxver; i++)
+    {
         smejcomb[i] = new int[maxver];
         for (j = 0; j < maxver; j++)
         {
@@ -59,7 +59,7 @@ void IntersectionGraphs(int** smej1, int** smej2, int ver1, int ver2)
         }
     }
     cout << "Резельтат пересечения графов" << endl << endl;
-    PrintMatrix(maxver, &smejinter);
+    PrintMatrix(maxver - 1, &smejinter);
     cout << endl;
     for (i = 0; i < maxver; i++)
     {
@@ -75,15 +75,17 @@ void SummGraphs(int** smej1, int** smej2, int ver1, int ver2)
         maxver = ver1;
     else
         maxver = ver2;
+
+    int p = abs(ver1 - ver2);
     int** smejsumm = new int* [maxver];
     for (i = 0; i < maxver; i++)
     {
         smejsumm[i] = new int[maxver];
         for (j = 0; j < maxver; j++)
         {
-            if (i < ver1 && i < ver2 && j < ver1 && j < ver2)
+            if (i < ver1 || j < ver1 || j < ver2 || i < ver2)
             {
-                if (i == j || (smej1[i][j] == 1 && smej2[i][j] == 1)) smejsumm[i][j] = 0;        
+                if (i == j) smejsumm[i][j] = 0;
                 else
                 {
                     int val1;
@@ -98,6 +100,13 @@ void SummGraphs(int** smej1, int** smej2, int ver1, int ver2)
                 }
             }
             else smejsumm[i][j] = 0;
+        }
+    }
+    for (i = 0; i < maxver - p; i++)
+    {
+        for (j = 0; j < maxver - p; j++)
+        {
+            if (smej1[i][j] == 1 && smej2[i][j] == 1) smejsumm[i][j] = 0;
         }
     }
     cout << "Резельтат кольцевой суммы графов" << endl << endl;
@@ -125,7 +134,7 @@ void DecartGraphs(int** smej1, int** smej2, int ver1, int ver2)
         }
     }
 
-    int u=0, v=0, i1,j1;
+    int u = 0, v = 0, i1, j1;
     for (i = 0; i < ver1; i++)
     {
         for (j = 0; j < ver2; j++)
@@ -186,7 +195,7 @@ void Zad34(int ver1, int ver2, int** smej1, int** smej2, SP** MassSpis1, SP** Ma
         cout << "3)Кольцевая сумма;" << endl;
         cout << "4)Декартово произведение;" << endl;
         cout << "5)Вернуться к выбору задания;" << endl;
-        cout << "Выберите действие:"<<endl;
+        cout << "Выберите действие:" << endl;
         cin >> choice;
         switch (choice)
         {
