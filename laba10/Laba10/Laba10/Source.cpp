@@ -15,7 +15,7 @@ typedef struct GraphSettings {
 
 GS values(int argc, char* argv[])
 {
-    GS val = { 1,0 };
+    GS val = { 1,1 };
 
     for (i = 1; i < argc; i++)
     {
@@ -66,8 +66,9 @@ void main(int argc, char* argv[])
     int* visit = 0;
     int* dist = 0;
     int* eksen = 0;
-    int choice, ver, ver1, k = 0, first = 0, MaxDist = 0, D = 0, R = 0;
+    int choice, ver, ver1, k = 0, first = 0, MaxDist = 0, D = 0, R = 0, C;
     bool  prov1 = true;
+    int* CentrT = 0;
 
     cout << "Введите количество вершин графа: ";
     cin >> ver;
@@ -204,6 +205,17 @@ void main(int argc, char* argv[])
         case 2:
             D = INT_MIN;
             R = INT_MAX;
+            C = INT_MAX;
+            CentrT = new int[ver];
+            if (CentrT == NULL)
+            {
+                cout << "Не удалось выделить память!" << endl;
+                return;
+            }
+            for (i = 0; i < ver; i++)
+            {
+                CentrT[i] = 0;
+            }
             visit = new int[ver];
             if (visit == NULL)
             {
@@ -238,11 +250,14 @@ void main(int argc, char* argv[])
                 cout << endl << "Для вершины " << first + 1<<endl;
                 for (int firs = 0; firs < ver; firs++)
                 {
+
+                    CentrT[first] += visit[firs];
                     cout << visit[firs] << " ";
                 }
                 cout << endl;
                 eksen[first] = MaxDist;
-                cout << "Эксентриситет " << eksen[first] << endl;
+                cout << "Эксентриситет " << eksen[first] << endl << "Общая сумма:" << CentrT[first] << endl;
+                
             }
             for (i = 0; i < ver; i++)
             {
@@ -259,9 +274,17 @@ void main(int argc, char* argv[])
                     R = eksen[i];
                 }
             }
+
+            for (i = 0; i < ver; i++)
+            {
+                if (CentrT[i] < C)
+                {
+                    C = CentrT[i];
+                }
+            }
             cout << endl << "Радиус графа:" << R << endl;
             cout << "Диаметр графа:" << D << endl;
-            cout << "Центральные вершины";
+            cout << "Центральные вершины:";
             for (i = 0; i < ver; i++)
             {
                 if (eksen[i] == R)
@@ -270,7 +293,7 @@ void main(int argc, char* argv[])
                 }
 
             }
-            cout << endl << "Периферийные вершины";
+            cout << endl << "Периферийные вершины:";
             for (i = 0; i < ver; i++)
             {
                 if (eksen[i] == D)
@@ -278,6 +301,14 @@ void main(int argc, char* argv[])
                     cout << " " << i + 1;
                 }
             }
+            cout << endl << "Центр тяжести - вершина(ы):";
+            for (i = 0; i < ver; i++)
+            {
+                if (CentrT[i] == C)
+                {
+                    cout  << i + 1<< " ";
+                }
+            } 
             cout << endl;
             delete[] visit;
             delete[] eksen;
