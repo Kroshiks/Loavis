@@ -1,0 +1,3 @@
+﻿  Source.cpp
+D:\PGU\2 курс\1 семестр\Логика\Доп задание\DOP\DOP\Source.cpp(15,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  DOP.vcxproj -> D:\PGU\2 курс\1 семестр\Логика\Доп задание\DOP\x64\Debug\DOP.exe
